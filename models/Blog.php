@@ -8,6 +8,8 @@ use Yii;
 
 class Blog extends ActiveRecord
 {
+    public $image;
+
     public static function tableName()
     {
         return 'blogs';
@@ -36,15 +38,17 @@ class Blog extends ActiveRecord
     public function rules()
     {
         return [
-            // Scenario: Create (only title and content are allowed)
+            // Scenario: Create (only title, content and image are allowed)
             [['title', 'content'], 'required', 'on' => self::SCENARIO_CREATE],
             [['title', 'content'], 'string', 'on' => self::SCENARIO_CREATE],
             [['title'], 'unique', 'on' => self::SCENARIO_CREATE, 'message' => 'This title has already been taken.'],
+            [['image'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg, jpeg, gif', 'on' => self::SCENARIO_CREATE],
 
-            // Scenario: Update (title and content are allowed)
+            // Scenario: Update (title, content and image are allowed)
             [['title', 'content'], 'required', 'on' => self::SCENARIO_UPDATE],
             [['title', 'content'], 'string', 'on' => self::SCENARIO_UPDATE],
             [['title'], 'unique', 'on' => self::SCENARIO_UPDATE, 'message' => 'This title has already been taken.', 'targetAttribute' => 'title', 'filter' => ['!=', 'id', $this->id]],
+            [['image'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg, gif', 'on' => self::SCENARIO_UPDATE],
 
             [['status'], 'in', 'range' => [self::STATUS_PENDING, self::STATUS_APPROVED, self::STATUS_REJECTED]],
         ];
@@ -95,5 +99,30 @@ class Blog extends ActiveRecord
         } else {
             return 'Unknown Status'; // Default case for unknown statuses
         }
+    }
+
+    /**
+     * Handles file upload for the blog image.
+     * @return bool whether the image was successfully uploaded
+     */
+    public function uploadImage()
+    {
+        $file = $this->image;
+
+        if ($file && $this->validate()) {
+            $fileName = $this->slug . '_' . time() . '.' . $file->extension;
+            $path = Yii::getAlias('@webroot/uploads/blogs/') . $fileName;
+
+            if (!is_dir(Yii::getAlias('@webroot/uploads/blogs/'))) {
+                mkdir(Yii::getAlias('@webroot/uploads/blogs/'), 0775, true);
+            }
+
+            if ($file->saveAs($path)) {
+                $this->image_path = '/uploads/blogs/' . $fileName;
+                return true;
+            }
+        }
+
+        return false;
     }
 }

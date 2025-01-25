@@ -19,6 +19,7 @@ class m250122_091037_create_blogs_table extends Migration
             'slug' => $this->string()->notNull(),
             'content' => $this->text()->notNull(),
             'status' => "ENUM('pending', 'approved', 'rejected') DEFAULT 'pending'",
+            'image_path' => $this->string()->defaultValue(null),
             'approved_by' => $this->integer()->defaultValue(null),
             'approved_at' => $this->timestamp()->defaultValue(null),
             'rejected_by' => $this->integer()->defaultValue(null),

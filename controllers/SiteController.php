@@ -154,7 +154,8 @@ class SiteController extends Controller
             'pageSize' => 2,
         ]);
 
-        $blogs = $query->offset($pagination->offset)
+        $blogs = $query->orderBy(['approved_at' => SORT_DESC])
+            ->offset($pagination->offset)
             ->limit($pagination->limit)
             ->all();
 

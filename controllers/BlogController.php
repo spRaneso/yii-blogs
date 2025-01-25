@@ -8,6 +8,7 @@ use yii\data\Pagination;
 use app\models\Blog;
 use Yii;
 use yii\web\NotFoundHttpException;
+use yii\web\UploadedFile;
 
 class BlogController extends Controller
 {
@@ -76,8 +77,10 @@ class BlogController extends Controller
         $model->setScenario(Blog::SCENARIO_CREATE);
 
         if (Yii::$app->request->isPost) {
+            $model->image = UploadedFile::getInstance($model, 'image');
+
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-                if ($model->save()) {
+                if ($model->uploadImage() && $model->save()) {
                     Yii::$app->session->setFlash('success', 'Blog created successfully.');
                     return $this->redirect(['index']);
                 }
@@ -97,8 +100,15 @@ class BlogController extends Controller
         $model->setScenario(Blog::SCENARIO_UPDATE);
 
         if (Yii::$app->request->isPost) {
+            $model->image = UploadedFile::getInstance($model, 'image');
+
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-                if ($model->save()) {
+                if ($model->image && $model->uploadImage()) {
+                    if ($model->save()) {
+                        Yii::$app->session->setFlash('success', 'Blog updated successfully.');
+                        return $this->redirect(['index']);
+                    }
+                } elseif ($model->save()) {
                     Yii::$app->session->setFlash('success', 'Blog updated successfully.');
                     return $this->redirect(['index']);
                 }
@@ -128,6 +138,9 @@ class BlogController extends Controller
         $model = Blog::findOne(['slug' => $slug]);
         if ($model && $model->status === Blog::STATUS_PENDING) {
             $model->status = Blog::STATUS_APPROVED;
+            $model->approved_by = Yii::$app->user->id;
+            $model->approved_at = new \yii\db\Expression('NOW()');
+
             if ($model->save()) {
                 $blogTitle = $model->title;
                 Yii::$app->session->setFlash('success', "Blog: '$blogTitle' APPROVED successfully.");
