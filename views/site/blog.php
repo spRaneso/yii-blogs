@@ -19,6 +19,13 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php foreach ($blogs as $blog): ?>
             <div class="col-md-6 mb-4">
                 <div class="blog-post p-3 border rounded">
+                    <?php if ($blog->image_path): ?>
+                        <div class="blog-image-wrapper">
+                            <img src="<?= Yii::getAlias('@web') . Html::encode($blog->image_path) ?>"
+                                class="img-fluid rounded" alt="<?= Html::encode($blog->title) ?>">
+                        </div>
+                    <?php endif; ?>
+
                     <a href="<?= Url::to(['site/blog-details', 'slug' => $blog->slug]) ?>" class="text-decoration-none">
                         <h3 class="blog-title"><?= Html::encode($blog->title) ?></h3>
                     </a>
@@ -54,20 +61,38 @@ $this->params['breadcrumbs'][] = $this->title;
         border: 1px solid #ddd;
         border-radius: 8px;
         transition: transform 0.2s ease-in-out;
+        height: 350px; /* Fixed height for the blog post container */
+        display: flex;
+        flex-direction: column;
     }
 
     .blog-post:hover {
         transform: translateY(-5px);
     }
 
+    .blog-image-wrapper {
+        height: 150px; /* Fixed height for the image section */
+        overflow: hidden;
+        margin-bottom: 10px;
+    }
+
+    .blog-image-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Ensure the image covers the area without stretching */
+    }
+
     .blog-title {
         font-size: 1.5em;
         color: #333;
+        margin: 0;
+        flex-grow: 1; /* Allow title to grow within fixed height */
     }
 
     .blog-content {
         font-size: 1em;
         color: #555;
+        flex-grow: 2; /* Allow content to grow */
     }
 
     .blog-meta {
@@ -85,3 +110,4 @@ $this->params['breadcrumbs'][] = $this->title;
     }
 ');
     ?>
+</div>

@@ -12,24 +12,26 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="blog-details container py-5">
-    <!-- Center the title using Bootstrap's text-center class -->
-    <h1 class="blog-title text-center mb-4"><?= Html::encode($blog->title) ?></h1>
 
-    <!-- Blog meta information -->
+    <h1 class="blog-title text-center mb-4"><?= Html::encode($blog->title) ?></h1>
     <div class="blog-meta text-center mb-4">
-        <!-- Handle missing user gracefully -->
         <span class="author"><?= Html::encode($blog->user ? $blog->user->full_name : 'Unknown User') ?></span> |
         <span class="date"><?= Yii::$app->formatter->asDate($blog->approved_at) ?></span>
     </div>
 
-    <!-- Blog content with HTML formatting -->
+    <?php if ($blog->image_path): ?>
+        <div class="blog-image-wrapper mb-4">
+            <img src="<?= Yii::getAlias('@web') . Html::encode($blog->image_path) ?>"
+                class="img-fluid rounded" alt="<?= Html::encode($blog->title) ?>">
+        </div>
+    <?php endif; ?>
+
     <div class="blog-content mb-4">
         <?= Yii::$app->formatter->asHtml($blog->content) ?>
     </div>
 
-    <!-- Back to Blogs button -->
     <div class="back-link text-center">
-        <a href="<?= Url::to(['blog/index']) ?>" class="btn btn-dark btn-sm">Back to Blogs</a>
+        <a href="<?= Url::to(['site/blog']) ?>" class="btn btn-dark btn-sm">Back to Blogs</a>
     </div>
 </div>
 

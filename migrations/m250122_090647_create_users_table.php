@@ -15,10 +15,10 @@ class m250122_090647_create_users_table extends Migration
         $this->createTable('{{%users}}', [
             'id' => $this->primaryKey(),
             'username' => $this->string()->notNull()->unique(),
-            'full_name' => $this->string()->notNull(),
+            'full_name' => $this->string()->defaultValue(null),
             'email' => $this->string()->notNull()->unique(),
             'password' => $this->string()->notNull(),
-            'auth_key' => $this->string(32)->notNull(),
+            'auth_key' => $this->string(32)->defaultValue(null),
             'access_token' => $this->string(64)->unique(),
             'role' => "ENUM('user', 'admin') DEFAULT 'user'",
             'status' => "ENUM('active', 'inactive') DEFAULT 'active'",
