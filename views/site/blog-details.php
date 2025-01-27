@@ -13,14 +13,17 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="blog-details container py-5">
 
-    <h1 class="blog-title text-center mb-4"><?= Html::encode($blog->title) ?></h1>
+    <h2 class="blog-title text-center mb-4 fw-bold text-dark bg-light p-3 rounded-3 shadow">
+        <?= Html::encode($blog->title) ?>
+    </h2>
+    
     <div class="blog-meta text-center mb-4">
-        <span class="author"><?= Html::encode($blog->user ? $blog->user->full_name : 'Unknown User') ?></span> |
-        <span class="date"><?= Yii::$app->formatter->asDate($blog->approved_at) ?></span>
+        <span class="author fw-semibold"><?= Html::encode($blog->user ? $blog->user->full_name : 'Unknown User') ?></span> |
+        <span class="date text-muted"><?= Yii::$app->formatter->asDate($blog->approved_at) ?></span>
     </div>
 
     <?php if ($blog->image_path): ?>
-        <div class="blog-image-wrapper mb-4">
+        <div class="blog-image-wrapper text-center mb-4">
             <img src="<?= Yii::getAlias('@web') . Html::encode($blog->image_path) ?>"
                 class="img-fluid rounded" alt="<?= Html::encode($blog->title) ?>">
         </div>
@@ -34,28 +37,3 @@ $this->params['breadcrumbs'][] = $this->title;
         <a href="<?= Url::to(['site/blog']) ?>" class="btn btn-dark btn-sm">Back to Blogs</a>
     </div>
 </div>
-
-<?php $this->registerCss('
-    .blog-title {
-        font-size: 2.2em;
-    }
-
-    .blog-meta .author {
-        font-weight: bold;
-    }
-
-    .blog-meta .date {
-        color: #888;
-    }
-
-    .blog-content {
-        font-size: 1.1em;
-        line-height: 1.6;
-        color: #333;
-    }
-
-    .back-link .btn {
-        text-decoration: none;
-    }
-');
-?>

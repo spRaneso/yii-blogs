@@ -12,10 +12,12 @@ class m250122_091215_seed_users_table extends Migration
      */
     public function safeUp()
     {
-        $this->batchInsert('users', ['username', 'email', 'password', 'role'], [
-            ['admin', 'admin@mail.com', Yii::$app->getSecurity()->generatePasswordHash('Admin@123'), 'admin'],
-            ['ram', 'ram@mail.com', Yii::$app->getSecurity()->generatePasswordHash('User@123'), 'user'],
-            ['shyam', 'shyam@mail.com', Yii::$app->getSecurity()->generatePasswordHash('User@123'), 'user'],
+        $this->batchInsert('users', ['username', 'full_name', 'email', 'password', 'role'], [
+            ['admin', 'Admin', 'admin@mail.com', Yii::$app->getSecurity()->generatePasswordHash('Admin@123'), 'admin'],
+            ['ram', 'Ram', 'ram@mail.com', Yii::$app->getSecurity()->generatePasswordHash('User@123'), 'user'],
+            ['shyam', 'Shyam', 'shyam@mail.com', Yii::$app->getSecurity()->generatePasswordHash('User@123'), 'user'],
+            ['surya', 'Surya', 'surya@mail.com', Yii::$app->getSecurity()->generatePasswordHash('User@123'), 'user'],
+            ['rahul', 'Rahul', 'rahul@mail.com', Yii::$app->getSecurity()->generatePasswordHash('User@123'), 'user'],
         ]);
     }
 

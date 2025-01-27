@@ -63,7 +63,11 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        if (!Yii::$app->user->isGuest) {
+            return $this->redirect(['/blog/index']);
+        } else{
+            return $this->redirect(['/site/blog']);
+        }
     }
 
     /**
@@ -74,7 +78,8 @@ class SiteController extends Controller
     public function actionLogin()
     {
         if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
+            // return $this->goHome();
+            return $this->redirect(['/blog/index']);
         }
 
         $model = new LoginForm();
@@ -132,12 +137,19 @@ class SiteController extends Controller
 
     public function actionSignup()
     {
+        if (!Yii::$app->user->isGuest) {
+            return $this->redirect(['/blog/index']);
+        }
+
         $model = new SignupForm();
 
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->signup()) {
             Yii::$app->session->setFlash('success', 'Thank you for registration. Please Login.');
 
-            return $this->goHome();
+            $login = new LoginForm();
+            return $this->render('login', [
+                'model' => $login,
+            ]);
         }
 
         return $this->render('signup', [
@@ -151,7 +163,7 @@ class SiteController extends Controller
 
         $pagination = new \yii\data\Pagination([
             'totalCount' => $query->count(),
-            'pageSize' => 2,
+            'pageSize' => 6,
         ]);
 
         $blogs = $query->orderBy(['approved_at' => SORT_DESC])
