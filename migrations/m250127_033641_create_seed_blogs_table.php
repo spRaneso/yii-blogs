@@ -37,17 +37,16 @@ class m250127_033641_create_seed_blogs_table extends Migration
             </div>',
         ];
 
-        $b_i_p = '/uploads/blogs/';
-        $imagePaths = [
-            $b_i_p . 'ai.jpeg',
-            $b_i_p . 'b.jpg',
-            $b_i_p . 'bb.jpg',
-            $b_i_p . 'bd.jpg',
-            $b_i_p . 'cc.png',
-            $b_i_p . 'cs.jpg',
-            $b_i_p . 'dna.jpg',
-            $b_i_p . 'f.jpg',
-            $b_i_p . 'qc.jpg',
+        $images = [
+            'ai.jpeg',
+            'b.jpg',
+            'bb.jpg',
+            'bd.jpg',
+            'cc.png',
+            'cs.jpg',
+            'dna.jpg',
+            'f.jpg',
+            'qc.jpg',
         ];
 
         $data = [];
@@ -57,8 +56,7 @@ class m250127_033641_create_seed_blogs_table extends Migration
             $userId = $userIds[array_rand($userIds)];
             $content = $blogContents[array_rand($blogContents)];
             $approvedAt = date('Y-m-d H:i:s', rand($currentTimestamp - 365 * 24 * 60 * 60, $currentTimestamp));
-
-            $imagePath = $imagePaths[array_rand($imagePaths)];
+            $imagePath = '/uploads/blogs/' . $images[array_rand($images)];
 
             $data[] = [
                 'user_id' => $userId,
